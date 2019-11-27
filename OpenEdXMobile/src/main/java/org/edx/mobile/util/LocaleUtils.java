@@ -1,6 +1,6 @@
 package org.edx.mobile.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.edx.mobile.model.api.TranscriptModel;
 import org.edx.mobile.user.FormOption;
