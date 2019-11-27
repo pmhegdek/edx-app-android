@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import org.edx.mobile.deeplink.ScreenDef;
 import org.edx.mobile.event.CourseDashboardRefreshEvent;
