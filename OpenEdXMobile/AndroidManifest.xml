@@ -25,6 +25,7 @@
     <!-- Sticky broadcast passing a message from one screen and display on another -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
+    <uses-sdk tools:overrideLibrary="com.msangeet.gurusangeet.gsutils, com.msangeet.gurusangeet.gsrecord, com.msangeet.gurusangeet.gslearn, com.msangeet.gurusangeet.gsmusiclib, io.alterac.blurkit"/>
     <!-- Setup for Code Coverage -->
     <instrumentation
         android:name="org.edx.mobile.instrumentation.EdxInstrumentation"

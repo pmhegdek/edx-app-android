@@ -63,3 +63,4 @@ gradle.properties
 
 # reports directory
 /artifacts
+gscore
