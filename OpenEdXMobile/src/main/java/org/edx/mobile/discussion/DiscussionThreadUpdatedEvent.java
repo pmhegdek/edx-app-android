@@ -1,8 +1,6 @@
 package org.edx.mobile.discussion;
 
-import android.support.annotation.NonNull;
-
-import org.edx.mobile.discussion.DiscussionThread;
+import androidx.annotation.NonNull;
 
 public class DiscussionThreadUpdatedEvent {
 

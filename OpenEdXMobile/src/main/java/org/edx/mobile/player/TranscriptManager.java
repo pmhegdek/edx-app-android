@@ -1,12 +1,11 @@
 package org.edx.mobile.player;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import org.edx.mobile.R;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.TranscriptModel;
 import org.edx.mobile.util.AppConstants;

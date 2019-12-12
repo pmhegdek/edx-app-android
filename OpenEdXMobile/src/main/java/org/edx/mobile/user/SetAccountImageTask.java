@@ -1,10 +1,9 @@
 package org.edx.mobile.user;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 
@@ -13,9 +12,6 @@ import org.edx.mobile.task.Task;
 import org.edx.mobile.third_party.crop.CropUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import de.greenrobot.event.EventBus;
 
