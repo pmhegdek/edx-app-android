@@ -1,5 +1,5 @@
-API_HOST_URL: 'http://10.0.2.2:8000' # localhost is 10.0.2.2 in Android
-ENVIRONMENT_DISPLAY_NAME: 'Localhost'
-PLATFORM_NAME: 'Your platform name here'
-PLATFORM_DESTINATION_NAME: 'example.com'
+API_HOST_URL: 'https://lms.jnaanasaadhan.com' # localhost is 10.0.2.2 in Android
+ENVIRONMENT_DISPLAY_NAME: 'lms.jnaanasaadhan.com'
+PLATFORM_NAME: 'lms.jnaanasaadhan.com'
+PLATFORM_DESTINATION_NAME: 'lms.jnaanasaadhan.com'
 FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
