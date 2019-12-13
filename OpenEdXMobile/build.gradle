@@ -166,11 +166,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'de.greenrobot:eventbus:2.4.1'
     implementation 'com.squareup.phrase:phrase:1.1.0'
-    implementation ('com.squareup.okhttp3:okhttp:3.0.1'){
+    implementation ('com.squareup.okhttp3:okhttp:3.4.1'){
+        force = true
+    }
+    implementation ('com.squareup.okhttp3:logging-interceptor:3.4.1'){
         force = true
     }
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     /* Exclude dependencies defined statically at the top-
      * level, to prevent them from being resolved to the
      * latest version as a result of dynamic version

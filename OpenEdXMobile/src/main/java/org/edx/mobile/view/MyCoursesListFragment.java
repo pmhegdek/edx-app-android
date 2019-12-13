@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.msangeet.gurusangeet.GSInitialDBLoader;
 import com.msangeet.gurusangeet.gsmodels.GSUser;
 import com.msangeet.gurusangeet.gsrecord.Configurator;
 import com.msangeet.gurusangeet.gsrecord.RecorderActivity;
 import com.msangeet.gurusangeet.gsutils.AudioHardwareManager;
 import com.msangeet.gurusangeet.gsutils.GSSettingsPersistenceMgr;
+import com.msangeet.gurusangeet.gsutils.data.db.SyncListener;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
@@ -113,45 +115,37 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
             @Override
             public void onClick(View v) {
 
-                HashMap map = new HashMap();
 
-                map.put("documentType", GSUser.DOCUMENT_TYPE);
-                map.put("uuid", "ss-ff");
-                map.put("teacherUUID", "ff-gg");
-                map.put("firstName", "Hellof");
-                map.put("lastName", "Hail");
-                map.put("inviteCode", "sample");
+//                Configurator configurator = Configurator.getInstance();
+//                configurator.setRecordAudioHardwareMgr(new AudioHardwareManager());
+//                configurator.setRecordSettingsPersistenceMgr(new GSSettingsPersistenceMgr(getContext()));
+//
+//
+//                Intent intent = null;
+//                Class recorderClass = RecorderActivity.class;
+//                intent = new Intent(getContext(), recorderClass);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra("userDetails", map);
+//                getContext().startActivity(intent);
 
-                map.put("email", "prasad@msangeet.com");
-                map.put("phone", "dfdfd");
-                map.put("countryCode", "dgdggd");
-                map.put("genre", "Carnatic Classical");
-                map.put("gender", "Male");
-                map.put("DOB", "29-05-1993");
-                map.put("instrument", "Vocal");
-                map.put("basePitch", 48);
+                GSInitialDBLoader initialDBLoader = GSInitialDBLoader.getInstance();
+                initialDBLoader.setContext(getContext());
+                initialDBLoader.initialise(null, new SyncListener() {
+                    @Override
+                    public void onProgress(long completed, long total) {
 
-                map.put("createdOn", new Date().getTime());
-                map.put("modifiedOn", new Date().getTime());
-                map.put("isTeacher", false);
-                map.put("isStudent", true);
-                map.put("isDeleted", false);
-                map.put("inSupportMode", false);
-                map.put("isPlannedRecordingMode", false);
-//                map.put("channels", channels);
+                    }
 
+                    @Override
+                    public void onSuccess(long completed, long total) {
 
-                Configurator configurator = Configurator.getInstance();
-                configurator.setRecordAudioHardwareMgr(new AudioHardwareManager());
-                configurator.setRecordSettingsPersistenceMgr(new GSSettingsPersistenceMgr(getContext()));
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
 
-                Intent intent = null;
-                Class recorderClass = RecorderActivity.class;
-                intent = new Intent(getContext(), recorderClass);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userDetails", map);
-                getContext().startActivity(intent);
+                    }
+                });
                 Log.i("tag", "Gurusangeet button clicked");
             }
         });
