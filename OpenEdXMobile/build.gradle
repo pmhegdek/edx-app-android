@@ -174,7 +174,7 @@ dependencies {
     /* Exclude dependencies defined statically at the top-
      * level, to prevent them from being resolved to the
      * latest version as a result of dynamic version
-     * definitions in the transitive dependencies.
+     * definitions in the transitive dependFencies.
      */
     implementation ('com.squareup.retrofit2:retrofit:2.1.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
@@ -257,12 +257,12 @@ dependencies {
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
 
-    implementation project(path: ':gscore/gsmodels')
-    implementation project(path: ':gscore/gsmusiclib')
-    implementation project(path: ':gscore/gsrecord')
-    implementation project(path: ':gscore/gslearn')
-    implementation project(path: ':gscore/gsbaseui')
-    implementation project(path: ':gscore/gsutils')
+    implementation project(path: ':gs-core/gsmodels')
+    implementation project(path: ':gs-core/gsmusiclib')
+    implementation project(path: ':gs-core/gsrecord')
+    implementation project(path: ':gs-core/gslearn')
+    implementation project(path: ':gs-core/gsbaseui')
+    implementation project(path: ':gs-core/gsutils')
 }
 
 configurations {

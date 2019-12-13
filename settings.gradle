@@ -1,1 +1,1 @@
-include ':OpenEdXMobile', ':android-iconify', ':android-iconify-fontawesome', ':buildSrc', ':gscore/gsmodels', ':gscore/gsmusiclib', ':gscore/gsrecord', ':gscore/gslearn', ':gscore/gsbaseui', ':gscore/gsutils'
+include ':OpenEdXMobile', ':android-iconify', ':android-iconify-fontawesome', ':buildSrc', ':gs-core/gsmodels', ':gs-core/gsmusiclib', ':gs-core/gsrecord', ':gs-core/gslearn', ':gs-core/gsbaseui', ':gs-core/gsutils'

@@ -8,10 +8,19 @@
         android:layout_height="match_parent"
         android:background="@color/grey_act_background">
 
+        <Button
+            android:id="@+id/gs_sample_button"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Open gurusangeet"
+            android:layout_marginBottom="10dp"></Button>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp">
 
             <ListView
                 android:id="@+id/my_course_list"

@@ -1,15 +1,24 @@
 package org.edx.mobile.view;
 
 import androidx.databinding.DataBindingUtil;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.msangeet.gurusangeet.gsmodels.GSUser;
+import com.msangeet.gurusangeet.gsrecord.Configurator;
+import com.msangeet.gurusangeet.gsrecord.RecorderActivity;
+import com.msangeet.gurusangeet.gsutils.AudioHardwareManager;
+import com.msangeet.gurusangeet.gsutils.GSSettingsPersistenceMgr;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
@@ -35,6 +44,8 @@ import org.edx.mobile.util.UiUtil;
 import org.edx.mobile.view.adapters.MyCoursesAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -98,6 +109,52 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
         binding.myCourseList.addHeaderView(new View(getContext()), null, false);
         binding.myCourseList.setAdapter(adapter);
         binding.myCourseList.setOnItemClickListener(adapter);
+        binding.getRoot().findViewById(R.id.gs_sample_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                HashMap map = new HashMap();
+
+                map.put("documentType", GSUser.DOCUMENT_TYPE);
+                map.put("uuid", "ss-ff");
+                map.put("teacherUUID", "ff-gg");
+                map.put("firstName", "Hellof");
+                map.put("lastName", "Hail");
+                map.put("inviteCode", "sample");
+
+                map.put("email", "prasad@msangeet.com");
+                map.put("phone", "dfdfd");
+                map.put("countryCode", "dgdggd");
+                map.put("genre", "Carnatic Classical");
+                map.put("gender", "Male");
+                map.put("DOB", "29-05-1993");
+                map.put("instrument", "Vocal");
+                map.put("basePitch", 48);
+
+                map.put("createdOn", new Date().getTime());
+                map.put("modifiedOn", new Date().getTime());
+                map.put("isTeacher", false);
+                map.put("isStudent", true);
+                map.put("isDeleted", false);
+                map.put("inSupportMode", false);
+                map.put("isPlannedRecordingMode", false);
+//                map.put("channels", channels);
+
+
+                Configurator configurator = Configurator.getInstance();
+                configurator.setRecordAudioHardwareMgr(new AudioHardwareManager());
+                configurator.setRecordSettingsPersistenceMgr(new GSSettingsPersistenceMgr(getContext()));
+
+
+                Intent intent = null;
+                Class recorderClass = RecorderActivity.class;
+                intent = new Intent(getContext(), recorderClass);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("userDetails", map);
+                getContext().startActivity(intent);
+                Log.i("tag", "Gurusangeet button clicked");
+            }
+        });
         return binding.getRoot();
     }
 
