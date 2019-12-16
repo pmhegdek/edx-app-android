@@ -15,12 +15,23 @@ import android.view.ViewGroup;
 
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.msangeet.gurusangeet.GSInitialDBLoader;
+import com.msangeet.gurusangeet.gslearn.Perform.GSPerformScreen;
+import com.msangeet.gurusangeet.gslearn.VideoLesson.GSVideoScreen;
+import com.msangeet.gurusangeet.gslearn.utils.GSProgressIndicator;
 import com.msangeet.gurusangeet.gsmodels.GSUser;
+import com.msangeet.gurusangeet.gsmodels.lesson.GSCompositeLesson;
+import com.msangeet.gurusangeet.gsmodels.lesson.GSLesson;
+import com.msangeet.gurusangeet.gsmodels.lesson.content.gsLessonContent.GSLessonContent;
 import com.msangeet.gurusangeet.gsrecord.Configurator;
 import com.msangeet.gurusangeet.gsrecord.RecorderActivity;
 import com.msangeet.gurusangeet.gsutils.AudioHardwareManager;
+import com.msangeet.gurusangeet.gsutils.GSPerformanceSaveMgr;
 import com.msangeet.gurusangeet.gsutils.GSSettingsPersistenceMgr;
+import com.msangeet.gurusangeet.gsutils.data.GSLessonsDataManager;
+import com.msangeet.gurusangeet.gsutils.data.GSUserDataManager;
 import com.msangeet.gurusangeet.gsutils.data.db.SyncListener;
+import com.msangeet.gurusangeet.gsutils.gstasks.GSLessonResourceFetchTask;
+import com.msangeet.gurusangeet.gsutils.gstasks.tasks.GSTaskListener;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
@@ -64,7 +75,8 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
     private FragmentMyCoursesListBinding binding;
     private final Logger logger = new Logger(getClass().getSimpleName());
     private boolean refreshOnResume = false;
-
+    private GSProgressIndicator progressIndicator;
+    private String env = "debug";
     @Inject
     private IEdxEnvironment environment;
 
@@ -111,42 +123,12 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
         binding.myCourseList.addHeaderView(new View(getContext()), null, false);
         binding.myCourseList.setAdapter(adapter);
         binding.myCourseList.setOnItemClickListener(adapter);
+        progressIndicator = new GSProgressIndicator(getActivity());
         binding.getRoot().findViewById(R.id.gs_sample_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-//                Configurator configurator = Configurator.getInstance();
-//                configurator.setRecordAudioHardwareMgr(new AudioHardwareManager());
-//                configurator.setRecordSettingsPersistenceMgr(new GSSettingsPersistenceMgr(getContext()));
-//
-//
-//                Intent intent = null;
-//                Class recorderClass = RecorderActivity.class;
-//                intent = new Intent(getContext(), recorderClass);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.putExtra("userDetails", map);
-//                getContext().startActivity(intent);
-
-                GSInitialDBLoader initialDBLoader = GSInitialDBLoader.getInstance();
-                initialDBLoader.setContext(getContext());
-                initialDBLoader.initialise(null, new SyncListener() {
-                    @Override
-                    public void onProgress(long completed, long total) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(long completed, long total) {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
                 Log.i("tag", "Gurusangeet button clicked");
+                doInitialDBLoading();
             }
         });
         return binding.getRoot();
@@ -349,5 +331,118 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
     @Override
     protected boolean isShowingFullScreenError() {
         return errorNotification != null && errorNotification.isShowing();
+    }
+
+    private void doInitialDBLoading() {
+        GSInitialDBLoader initialDBLoader = GSInitialDBLoader.getInstance();
+        initialDBLoader.setContext(getContext());
+        initialDBLoader.initialise(null, new SyncListener() {
+            @Override
+            public void onProgress(long completed, long total) {
+                progressIndicator.showProgressIndicatorWithMessage("Loading data (" + completed + " of " + total + ")");
+            }
+
+            @Override
+            public void onSuccess(long completed, long total) {
+                progressIndicator.hideProgressIndicator();
+                //navigateToRecording();
+                loadLessonForPractice("91d5676a-809b-4013-b973-8f74d06ea723");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("tag", "Error while loading database data: " + e.getLocalizedMessage());
+                e.printStackTrace();
+                progressIndicator.hideProgressIndicator();
+            }
+        });
+    }
+
+    private void navigateToRecording() {
+        try {
+            Configurator configurator = Configurator.getInstance();
+            configurator.setRecordAudioHardwareMgr(new AudioHardwareManager());
+            configurator.setRecordSettingsPersistenceMgr(new GSSettingsPersistenceMgr(getContext()));
+
+
+            Intent intent = null;
+            Class recorderClass = RecorderActivity.class;
+            intent = new Intent(getContext(), recorderClass);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("userDetails", GSUserDataManager.getInstance(getContext(), env).getActiveUser().getMap());
+            getContext().startActivity(intent);
+        } catch (Exception e) {
+            Log.i("tag", "Error while navigateToRecording: " + e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void navigateToPracticeScreen(GSCompositeLesson compositeLesson, GSUser user) {
+        try {
+
+            boolean isVideoLesson = false;
+            if (compositeLesson.lessonParts.get(0).content.type
+                    == GSLessonContent.ContentType.ContentTypeVideo) {
+                isVideoLesson = true;
+            }
+
+            Intent intent = null;
+            Class activityClass = null;
+            if (isVideoLesson) {
+                activityClass = GSVideoScreen.class;
+            } else {
+                activityClass = GSPerformScreen.class;
+            }
+            intent = new Intent(getContext(), activityClass);
+            intent.putExtra("compositeLesson", compositeLesson.getArray());
+            intent.putExtra("userDetails", user.getMap());
+            intent.putExtra("isScoreDebugMode", false); // set true for scoring debug mode
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK); //For now new task is mandatory, will be changed later.
+            getContext().startActivity(intent);
+        } catch (Exception e) {
+            Log.i("tag", "Error in navigateToPracticeScreen: " + e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLessonForPractice(String lessonUUID) {
+        try {
+            GSLesson lesson = GSLessonsDataManager.getInstance(getContext(), env).getLesson(lessonUUID);
+            GSUser user = GSUserDataManager.getInstance(getContext(), env).getActiveUser();
+
+            downloadLesson(lesson, new GSTaskListener() {
+                @Override
+                public void onProgress(int progress) {
+
+                }
+
+                @Override
+                public void onSuccess() {
+                    com.msangeet.gurusangeet.gslearn.Configurator configurator = com.msangeet.gurusangeet.gslearn.Configurator.getInstance();
+                    configurator.setAudioHardwareMgr(new AudioHardwareManager());
+                    configurator.setPerformanceListener(new GSPerformanceSaveMgr(getContext(), env));
+
+                    ArrayList list = new ArrayList();
+                    list.add(lesson.getMap());
+                    GSCompositeLesson compositeLesson = new GSCompositeLesson(list);
+                    navigateToPracticeScreen(compositeLesson, user);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        } catch (Exception e) {
+            Log.i("tag", "Error while loadLessonForPractice: " + e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void downloadLesson(GSLesson lesson, GSTaskListener taskListener) {
+        GSLessonResourceFetchTask task = new GSLessonResourceFetchTask(lesson, taskListener, getContext(), env);
+        task.run();
     }
 }

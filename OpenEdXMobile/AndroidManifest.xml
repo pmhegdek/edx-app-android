@@ -25,6 +25,9 @@
     <!-- Sticky broadcast passing a message from one screen and display on another -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
+    <!-- Required by gurusangeet module for recording teacher or student audio-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
     <uses-sdk tools:overrideLibrary="com.msangeet.gurusangeet.gsutils, com.msangeet.gurusangeet.gsrecord, com.msangeet.gurusangeet.gslearn, com.msangeet.gurusangeet.gsmusiclib, io.alterac.blurkit"/>
     <!-- Setup for Code Coverage -->
     <instrumentation
@@ -366,6 +369,16 @@
             android:value="org.edx.mobile.googlecast.CastOptionsProvider" />
 
         <activity android:name="com.msangeet.gurusangeet.gsrecord.RecorderActivity" />
+
+        <activity
+            android:name="com.msangeet.gurusangeet.gslearn.Perform.GSPerformScreen"
+            android:screenOrientation="landscape">
+        </activity>
+
+        <activity
+            android:name=".gslearn.VideoLesson.GSVideoScreen"
+            android:screenOrientation="landscape">
+        </activity>
 
     </application>
 
