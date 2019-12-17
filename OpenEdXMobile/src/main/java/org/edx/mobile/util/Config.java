@@ -835,7 +835,9 @@ public class Config {
 
     @NonNull
     public ApiUrlVersionConfig getApiUrlVersionConfig() {
-        return getObjectOrNewInstance(API_URL_VERSION, ApiUrlVersionConfig.class);
+        String version = getObject(API_URL_VERSION) != null ? getObject(API_URL_VERSION).toString() : null;
+        return new ApiUrlVersionConfig(version);
+        //getObjectOrNewInstance(API_URL_VERSION, ApiUrlVersionConfig.class);
     }
 
     @NonNull
